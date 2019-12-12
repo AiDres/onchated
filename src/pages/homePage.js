@@ -7,17 +7,19 @@ import FrindsPage from './homeComponent/friendsPage';
 import AboutPage from './homeComponent/aboutUsPage';
 import SettingPage from './homeComponent/settingPage';
 import FavoritePage from './homeComponent/favoritePage';
+
+import Toast from 'react-native-root-toast';
 class HomePage extends React.Component{
     // state
     constructor(props){
         super(props);
         this.state = {
-            
         }
     }
-    
+
     // hookFunctions
     componentDidMount() {
+      
         this.onLoad(Object.assign({},this.props));
         this._navListener = this.props.navigation.addListener('didFocus', () => {
           this.onShow(Object.assign({},this.props));
@@ -26,11 +28,13 @@ class HomePage extends React.Component{
     componentWillUnmount() {
         this._navListener.remove();
     }
+    
 
     // methods
     onLoad(options){
-        console.log('Index onLoad :',options)
+        console.log('Index onLoad :',options);
     }
+    
     onShow(options){
         console.log('Index onShow :',options)
     }

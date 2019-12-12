@@ -1,5 +1,6 @@
 import React,{ Component } from 'react';
 import { View,Text } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 export default class KampongPage extends Component{
     // state
     constructor(props){
@@ -22,7 +23,8 @@ export default class KampongPage extends Component{
 
     // methods
     onLoad(options){
-        console.log('Kampong onLoad :',options)
+      console.log('Kampong onLoad :',options)
+
     }
     onShow(options){
         console.log('Kampong onShow :',options)

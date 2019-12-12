@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-community/async-storage';
 export default class U {
 
     // data = "2019-12-09 14:17:43";
@@ -23,5 +24,17 @@ export default class U {
             return 0;
         }
     }
-    
+    static setStorage(key,value){
+        AsyncStorage.setItem(key,value);
+    }
+    static getStorage(key){
+        const callBack = AsyncStorage.getItem(key);
+        if(callBack !== null) {
+            callBack.then((res)=>{
+              return res;
+          });
+        }else{
+          return '';
+        }
+    }
 }
