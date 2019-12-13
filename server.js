@@ -7,7 +7,8 @@ const domainPath = {
 const nameIds = {
     'login':['user/login',{email:'',pwd:''}],
     'hasLogin':['user/hasLogin',{token:''}],
-    'article':['socialMatter/article',{token:''}]
+    'article':['socialMatter/article',{token:''}],
+    'getMsgList':['user/getMsgList',{token:''}]
 }
 function getData(data={},reqPath,doSuccess){
     if(nameIds[reqPath]){

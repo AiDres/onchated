@@ -9,12 +9,16 @@ import SettingPage from './homeComponent/settingPage';
 import FavoritePage from './homeComponent/favoritePage';
 import MsgList from './homeComponent/msgList';
 import Toast from 'react-native-root-toast';
+const S = require('../../server');
+import U from '../util/utils';
+var token = '';
 class HomePage extends React.Component{
     // state
     constructor(props){
         super(props);
         this.state = {
-            list:[3242,232,53,23]
+            list:[],
+            visible:false
         }
     }
 
@@ -34,10 +38,33 @@ class HomePage extends React.Component{
     // methods
     onLoad(options){
         console.log('Index onLoad :',options);
+        U.getStorage('tokencode').then(res=>{
+            token = res;
+            this.getList();
+        });
     }
     
     onShow(options){
         console.log('Index onShow :',options)
+       
+    }
+    getList(){
+        S.getData({tokencode:token},'getMsgList',(res)=>{
+            if(res.data){
+                this.setState({
+                    list:res.data
+                })
+            }else{
+                this.setState({
+                    visible: true
+                }); 
+        
+                setTimeout(() => this.setState({
+                    visible: false
+                }), 5000);
+            }
+           
+        })
     }
     _toggleDrawer(){
         this.props.navigation.dispatch(DrawerActions.toggleDrawer());
@@ -46,7 +73,14 @@ class HomePage extends React.Component{
         return <>
                 <View style={styles.bgColor}>
                 <View><HeadElement upDrawerfun={this._toggleDrawer.bind(this)} title={'聊吧'} /></View>
-                <MsgList source={this.state.list}/>
+                {this.state.list.length?<MsgList source={this.state.list}/>:<></>}
+                <Toast
+                    visible={this.state.visible}
+                    position={200}
+                    shadow={true}
+                    animation={true}
+                    hideOnPress={true}
+                ><Text>{'未登录哦( ‵▽′)ψ'}</Text></Toast>
             </View>
             </>
     }
