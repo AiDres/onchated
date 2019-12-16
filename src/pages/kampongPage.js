@@ -1,7 +1,7 @@
 import React,{ Component } from 'react';
 import { View,Text } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-export default class KampongPage extends Component{
+class KampongPage extends Component{
     // state
     constructor(props){
         super(props);
@@ -38,3 +38,5 @@ export default class KampongPage extends Component{
      </>
     }
 }
+
+export default KampongPage;

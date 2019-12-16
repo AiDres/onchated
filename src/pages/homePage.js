@@ -1,14 +1,9 @@
 import React,{ Component } from 'react';
 import { View,Text,Image,StyleSheet,ScrollView } from 'react-native';
-import { createAppContainer } from  'react-navigation';
-import { createDrawerNavigator,DrawerActions,DrawerItems,SafeAreaView } from 'react-navigation-drawer';
-import HeadElement from './homeComponent/header';
-import FrindsPage from './homeComponent/friendsPage';
-import AboutPage from './homeComponent/aboutUsPage';
-import SettingPage from './homeComponent/settingPage';
-import FavoritePage from './homeComponent/favoritePage';
 import MsgList from './homeComponent/msgList';
+import HeadElement from './homeComponent/header';
 import Toast from 'react-native-root-toast';
+import ChatSpace from './homeComponent/chatSpace';
 const S = require('../../server');
 import U from '../util/utils';
 var token = '';
@@ -46,7 +41,7 @@ class HomePage extends React.Component{
     
     onShow(options){
         console.log('Index onShow :',options)
-       
+        
     }
     getList(){
         S.getData({tokencode:token},'getMsgList',(res)=>{
@@ -66,14 +61,24 @@ class HomePage extends React.Component{
            
         })
     }
+    actionFunc=(path,source)=>{
+        switch(path.dispatch){
+            case 'onchat':this.onchatSpace(source);break;
+            default :console.log('undefind routePath');
+        }
+    }
+    onchatSpace=(data)=>{
+        this.props.navigation.navigate('ChatSpace',{parentData:this.state.list[data.index]});
+    }
     _toggleDrawer(){
-        this.props.navigation.dispatch(DrawerActions.toggleDrawer());
+        console.log(this)
+        this.props.navigation.toggleDrawer();
     }
     render(){
         return <>
                 <View style={styles.bgColor}>
                 <View><HeadElement upDrawerfun={this._toggleDrawer.bind(this)} title={'聊吧'} /></View>
-                {this.state.list.length?<MsgList source={this.state.list}/>:<></>}
+                {this.state.list.length?<MsgList source={this.state.list} funs={this.actionFunc}/>:<></>}
                 <Toast
                     visible={this.state.visible}
                     position={200}
@@ -85,67 +90,6 @@ class HomePage extends React.Component{
             </>
     }
 }
-const MyDrawerNavigator = createDrawerNavigator({
-    PageHome:{
-        screen:HomePage,
-        navigationOptions:{
-            title:'主页',
-            drawerIcon: ({tintColor}) => (
-                <Image source={require('../static/images/icons/homeDrawe.png')} style={styles.drawerIconSize}/>
-            )
-
-        }
-    },
-    PageFriends:{
-        screen:FrindsPage,
-        navigationOptions:{
-            title:'我的好友',
-            drawerIcon: ({tintColor}) => (
-                <Image source={require('../static/images/icons/frindsDrawe.png')} style={styles.drawerIconSize}/>
-            )
-            
-        }
-    },
-    PageFavorite:{
-        screen:FavoritePage,
-        navigationOptions:{
-            title:'我的收藏',
-            drawerIcon: ({tintColor}) => (
-                <Image source={require('../static/images/icons/collectDrawe.png')} style={styles.drawerIconSize}/>
-            )
-        }
-    },
-    PageSetting:{
-        screen:SettingPage,
-        navigationOptions:{
-            title:'设置',
-            drawerIcon: ({tintColor}) => (
-                <Image source={require('../static/images/icons/settingDrawe.png')} style={styles.drawerIconSize}/>
-            )
-        }
-    },
-    PageAbout:{
-        screen:AboutPage,
-        navigationOptions:{
-            title:'关于我们',
-            drawerIcon: ({tintColor}) => (
-                <Image source={require('../static/images/icons/aboutDrawe.png')} style={styles.drawerIconSize}/>
-            )
-        }
-    }
-},{
-    drawerPosition:'left',
-    drawerWidth:200,
-    contentOptions: {
-        activeTintColor: '#e91e63',
-        itemsContainerStyle: {
-          marginVertical: 0,
-        },
-        iconContainerStyle: {
-          opacity: 1
-        }
-      }
-});
 const styles = StyleSheet.create({
     drawerIconSize:{
         width:28,
@@ -157,5 +101,6 @@ const styles = StyleSheet.create({
         height:'100%'
     }
 })
-const IndexPage = createAppContainer(MyDrawerNavigator);
-export default IndexPage;
+
+
+export default HomePage;

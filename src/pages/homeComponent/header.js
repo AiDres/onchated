@@ -19,11 +19,7 @@ export default class HeadElement extends Component {
                 onPress={this._toggleDrawer.bind(this)}
              ><Image source={require('../../static/images/icons/drawerIcon.png')} style={styles.drawerIconSize}/></TouchableOpacity>
              {/* <SearchBar placeholder="内容" /> */}
-             <View style={{
-               position:'absolute',
-               left:'50%',
-               right:'50%', 
-            }}><Text style={{
+             <View style={{alignItems:'center',flex:1}}><Text style={{
                color:'#FFFFFF'
               }}>
               {this.state.pageTitle}
@@ -41,10 +37,10 @@ const styles = StyleSheet.create({
         width:'100%',
         display:'flex',
         backgroundColor:'#6b52ae',
-        justifyContent:'center',
+        alignItems:'center',
         paddingLeft:20,
         paddingRight:20,
-        flexWrap:'nowrap'
+        flexDirection:'row'
     },
     drawerIconSize:{
         width:28,

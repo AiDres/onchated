@@ -9,7 +9,6 @@ export default class U {
         let l1 = src.replace(replaceReg1,'');
         data = l1.replace(replaceReg2,'-');
         var dateBegin = new Date(data.replace(/-/g, "/"));
-        console.log(dateBegin)
         var dateEnd = new Date();
         var dateDiff = dateEnd.getTime() - dateBegin.getTime();
         var dayDiff = Math.floor(dateDiff / (24 * 3600 * 1000));
@@ -19,7 +18,6 @@ export default class U {
         var minutes = Math.floor(leave2 / (60 * 1000))
         var leave3 = leave2 % (60 * 1000)
         var seconds = Math.round(leave3 / 1000)
-        console.log(dayDiff,hours,minutes,seconds);
         
         if (minutes!=0){
             return minutes+'分钟前';

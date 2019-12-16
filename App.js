@@ -1,15 +1,16 @@
 
 import React,{Component} from 'react';
 import { View,Text,Image,StyleSheet} from 'react-native';
-import HomePage from './src/pages/homePage';
+import IndexPage from './src/pages/routeConfig';
 import KampongPage from './src/pages/kampongPage';
 import PersonalPage from './src/pages/personalPage';
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-
+import { createStackNavigator } from 'react-navigation-stack';
+import  ChatSpace from './src/pages/homeComponent/chatSpace';
 const TabNavigator = createBottomTabNavigator({
   Home: {
-    screen:HomePage,
+    screen:IndexPage,
     navigationOptions: () => ({
       tabBarLabel: '首页',
 
@@ -79,4 +80,20 @@ const styles = StyleSheet.create({
       height:25
   }
 });
-export default createAppContainer(TabNavigator);
+const AppNavigatorRoute = createStackNavigator({
+    initRout:{
+        screen:createAppContainer(TabNavigator),
+        navigationOptions:()=>({
+            header:null
+        })
+    },
+    ChatSpace:{
+        screen:ChatSpace,
+        navigationOptions:()=>({
+            headerBackTitle:'返回'
+        })
+    }
+},{
+    initialRouteName:'initRout',
+})
+export default createAppContainer(AppNavigatorRoute);

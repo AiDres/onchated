@@ -108,6 +108,10 @@ export default class PersonalPage extends Component{
         }
       });
     }
+    
+    componentDidUpdate(){
+     
+    }
     render() {
         return (
           <View>
