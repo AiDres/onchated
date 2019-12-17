@@ -1,5 +1,6 @@
 import React,{ Component } from 'react';
 import { View,Text,TouchableOpacity,StyleSheet,Image} from 'react-native';
+import normalize from 'react-native-normalize';
 export default class ChatSpace extends Component{
         static navigationOptions={
             header:null
@@ -27,7 +28,7 @@ export default class ChatSpace extends Component{
         return <>
                 <View style={styles.container}>
                     <View style={styles.customHeaderOfChat}>
-                        <TouchableOpacity onPress={()=>this.props.navigation.goBack()}><Image source={require('../../static/images/icons/left-arrow-chevron.png')} style={styles.backIcon}/></TouchableOpacity>
+                        <TouchableOpacity onPress={()=>this.props.navigation.goBack()}><Image source={require('../../static/images/icons/left-arrow-chevron.jpg')} style={styles.backIcon}/></TouchableOpacity>
                         <View style={styles.targetInfo}>
                             <View><Text>{userTarget.uname}</Text></View>
                             <View><Text style={styles.defaultColor}>{userTarget.tips}</Text></View>
@@ -37,7 +38,12 @@ export default class ChatSpace extends Component{
                             <View></View>
                         </View>
                     </View>
-                    <Text>index page</Text>
+                    <View style={styles.msgBox}>
+                        <Text>index page</Text>
+                    </View>
+                    <View style={styles.inputBox}>
+                        <Text>index page</Text>
+                    </View>
                 </View>
         </>
     }
@@ -46,7 +52,8 @@ export default class ChatSpace extends Component{
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:'#F6F8FB'
+        backgroundColor:'#F6F8FB',
+        justifyContent:'space-between',
     },
     defaultColor:{
         color:'#CFD3DC'
@@ -74,4 +81,8 @@ const styles = StyleSheet.create({
         height:50,
         borderRadius:50,
     },
+    inputBox:{
+        height:normalize(60,'height'),
+        backgroundColor:'#FFF'
+    }
 })

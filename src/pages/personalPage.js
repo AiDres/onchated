@@ -6,10 +6,13 @@ import { Text, View,
   Animated,
   Easing,
  } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import IconTwitter from 'react-native-vector-icons/SimpleLineIcons'
 const S = require('../../server');
 import U from '../util/utils';
 var token = '';
 import DetailTemplate from './personalComponent/userDetail';
+import normalize from 'react-native-normalize';
 export default class PersonalPage extends Component{
     // state
     constructor(props){
@@ -52,7 +55,7 @@ export default class PersonalPage extends Component{
         var patternPwd = /^.*(?=.{6,16})(?=.*\d)(?=.*[A-Z]{2,})(?=.*[a-z]{2,})(?=.*[!@#$%^&*?\(\)]).*$/;
         let emailState = patternEmail.test(this.state.email);
         let pwdState = patternPwd.test(this.state.pwd);
-        
+        console.log(pwdState,emailState)
         if(!pwdState || !emailState){
           alert("邮箱或密码有误！");  
         }else{
@@ -117,7 +120,7 @@ export default class PersonalPage extends Component{
           <View>
             <ImageBackground source={require('../static/images/userBg.jpg')} style={{width: '100%', height: '100%'}}>
               <Animated.View style={[{opacity:this.state.fadeInOpacity,width: '100%', height: '100%',display:this.state.isLogin?'none':'flex'}]}>
-              <View style={styles.aboutBox}><Image source={require('../static/images/icons/about.png')}/></View>
+              <View style={styles.aboutBox}><Icon name="pagelines" size={normalize(26,'fontSize')}/></View>
               <View style={[styles.container]}>
                 <View><Text style={styles.title}>HELLO!</Text></View>
                 <View><Text style={styles.subTitle}>Sign in to your account</Text></View>
@@ -146,9 +149,9 @@ export default class PersonalPage extends Component{
                 </View>
               </View>
               <View style={styles.moreSign}>
-                <View><Image source={require('../static/images/icons/icon_qq.png')}/></View>
-                <View><Image source={require('../static/images/icons/icon_wechat.png')}/></View>
-                <View><Image source={require('../static/images/icons/icon_twitter.png')}/></View>
+                <View><Icon name="qq" color="#FFF" size={normalize(18,'fontSize')}/></View>
+                <View><Icon name="wechat" color="#FFF" size={normalize(18,'fontSize')}/></View>
+                <View><IconTwitter name="social-twitter" color="#FFF" size={normalize(18,'fontSize')}/></View>
               </View>
               </Animated.View>
               <DetailTemplate parentData={JSON.stringify({

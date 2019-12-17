@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     avatarBox:{
-        paddingLeft:24,
+        paddingLeft:10,
         elevation:50
     },
     msgBox:{
@@ -66,14 +66,14 @@ const styles = StyleSheet.create({
         color:'#9DA5BA'
     },
     avatarImg:{
-        width:64,
-        height:64,
+        width:60,
+        height:60,
         borderRadius:50,
         marginRight:24,
         
     },
     timerText:{
         color:'#929BB1',
-        paddingRight:20
+        paddingRight:10
     }
 })

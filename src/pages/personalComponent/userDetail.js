@@ -1,13 +1,16 @@
 import React,{ Component } from 'react';
 import { Text,View,Image,StyleSheet,ImageBackground } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
+import normalize from 'react-native-normalize';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import IconEdit from 'react-native-vector-icons/FontAwesome5';
 const S = require('../../../server');
+import U from '../../util/utils';
 export default class DetailTemplate extends Component{
     constructor(props){
         super(props);
         this.state={
-            entries:[{name:require('../../static/images/defaultImage/initImage_01.jpg')},{name:require('../../static/images/defaultImage/initImage_02.jpg')}]
-            ,userInfo:[],
+            userInfo:[],
             articles:[],
             token:''
         }
@@ -16,13 +19,13 @@ export default class DetailTemplate extends Component{
         return (
             <View style={styles.slide}>
                 <View>
-                    <ImageBackground source={{uri:item.themeimage}} style={{width:400,height:340}}>
-                        <Image style={styles.deleteIcon} source={require('../../static/images/defaultImage/delete.png')}></Image>
+                    <ImageBackground source={{uri:item.themeimage}} style={{width:normalize(340,'width'),height:normalize(240,'height'),alignItems:'flex-end'}}>
+                        <Icon style={styles.deleteIcon} name={'remove'} size={normalize(20)} backgroundColor='#000'/>
                     </ImageBackground>
                 </View>
-                <View style={{paddingLeft:10,paddingRight:10,flex:1}}>
-                    <Text>时间：{item.newstime || 'Date：2019-11-23 23:42:00'}</Text>
-                    <Text style={{marginTop:5,marginBottom:5}} numberOfLines={1}>{item.title}</Text>
+                <View style={{paddingLeft:normalize(10,'left'),paddingRight:normalize(10,'right'),flex:1}}>
+                    <Text style={styles.followersTip}>{U.filterDate(item.newstime) || 'Date：2019-11-23 23:42:00'}</Text>
+                    <Text style={{marginTop:normalize(5,'top'),marginBottom:normalize(5,'bottom')}} numberOfLines={1}>{item.title}</Text>
                     <Text numberOfLines={3}>{item.content || 'Remote debugger is in a background tab which may cause apps to perform slowly. Fix this by foregrounding the tab (or opening it in a separate window)Remote debugger is in a background tab which may cause apps to perform slowly. Fix this by foregrounding the tab (or opening it in a separate window).'}</Text>
                     
                 </View>
@@ -43,7 +46,7 @@ export default class DetailTemplate extends Component{
            <View style={styles.container}>
                <View style={styles.avatarInfo}>
                 <View style={styles.avatarBox}>
-                <Image source={{uri:this.state.userInfo.uAvatar}} style={{width:'100%',height:'100%',borderRadius:50}}/>
+                    <Image source={{uri:this.state.userInfo.uAvatar}} style={{width:'90%',height:'90%',borderRadius:50}}/>
                 </View>
                 <View style={styles.topContent}>
                     <View style={styles.contentDetail}>
@@ -69,13 +72,13 @@ export default class DetailTemplate extends Component{
                         </View>
                     </View>
                     <View style={styles.contentIcon}>
-                    <Image source={require('../../static/images/icons/edit_pen.png')}/>
+                        <Icon name="edit" size={normalize(18,'fontSize')} color="#3b5998"/>
                     </View>
                 </View>
                </View>
                <View style={styles.tipBox}>
-                    <Text style={{color:'#CAC5C5',fontSize:18}}>#我的动态#</Text>
-                    <Image source={require('../../static/images/icons/pen_icon.png')}/>
+                    <Text style={{color:'#CAC5C5',fontSize:normalize(16,'fontSize')}}>#我的动态#</Text>
+                    <IconEdit name="pen-fancy" size={normalize(28,'fontSize')} color="#FFF"/>
                </View>
                <View style={{width:'100%'}}>
                 <Carousel
@@ -83,9 +86,9 @@ export default class DetailTemplate extends Component{
                     ref={(c) => { this._carousel = c; }}
                     data={this.state.articles}
                     renderItem={this._renderItem}
-                    sliderWidth={440}
-                    sliderHeight={440}
-                    itemWidth={400}
+                    sliderWidth={normalize(340,'width')}
+                    sliderHeight={normalize(240,'height')}
+                    itemWidth={normalize(340,'width')}
                     />
                </View>
            </View>
@@ -95,28 +98,28 @@ export default class DetailTemplate extends Component{
 
 const styles = StyleSheet.create({
     container:{
-        paddingLeft:20,
-        paddingRight:20
+        paddingLeft:normalize(20,'left'),
+        paddingRight:normalize(20,'right')
     },
     avatarInfo:{
         width:'100%',
-        height:100,
+        height:normalize(80,'height'),
         backgroundColor:'#FFFFFF',
-        borderTopLeftRadius:20,
-        borderTopRightRadius:20,
-        marginTop:50,
+        borderTopLeftRadius:normalize(20,'borderRadius'),
+        borderTopRightRadius:normalize(20,'borderRadius'),
+        marginTop:normalize(50,'top'),
         flexDirection:'row',
         alignItems:'center'
         // justifyContent:'space-around'
     },
     avatarBox:{
-        height:80,
-        width:80,
+        height:normalize(70),
+        width:normalize(70),
         backgroundColor:'#FFFFFF',
         alignItems:'center',
         justifyContent:'center',
-        marginLeft:20,
-        borderRadius:50,
+        marginLeft:normalize(20,'left'),
+        borderRadius:normalize(50,'borderRadius'),
         shadowOffset: {width: 0, height: 5},
         shadowOpacity: 0.5,
         shadowRadius: 5,
@@ -128,39 +131,39 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },  
     contentDetail:{
-        width:290,
-        paddingLeft:10,
-        paddingRight:10,
-        height:80,
+        width:normalize(220,'width'),
+        paddingLeft:normalize(10,'left'),
+        paddingRight:normalize(10,'right'),
+        height:normalize(80,'height'),
     },
     detailName:{
-        paddingTop:8,
-        paddingLeft:10,
-        fontSize:18,
+        paddingTop:normalize(8,'top'),
+        paddingLeft:normalize(10,'left'),
+        fontSize:normalize(18,'fontSize'),
         fontWeight:'bold'
     },
     detailCity:{
-        paddingLeft:10,
-        fontSize:10,
+        paddingLeft:normalize(10,'left'),
+        fontSize:normalize(12,'fontSize'),
         color:'#C0C0C0'
     },
     followers:{
-        height:40,
+        height:normalize(40,'height'),
         width:'90%',
         // backgroundColor:'#787878',
-        paddingLeft:10,
+        paddingLeft:normalize(10,'left'),
         flexDirection:'row',
         justifyContent:'space-between'
     },
     followersCount:{
-        fontSize:15
+        fontSize:normalize(15,'fontSize')
     },
     followersTip:{
-        fontSize:12,
+        fontSize:normalize(12,'fontSize'),
         color:'#C0C0C0'
     },
     tipBox:{
-        marginTop:50,
+        marginTop:normalize(50,'top'),
         width:'100%',
         borderBottomWidth:1,
         borderBottomColor:'#FFFFFF',
@@ -169,8 +172,8 @@ const styles = StyleSheet.create({
         justifyContent:'space-between'
     },
     slide:{
-        marginTop:40,
-        height:440,
+        marginTop:normalize(40,'top'),
+        height:normalize(340,'height'),
         width:'100%',
         borderBottomLeftRadius:20,
         borderBottomRightRadius:20,
@@ -178,8 +181,7 @@ const styles = StyleSheet.create({
         overflow:'hidden'
     },
     deleteIcon:{
-        position:'relative',
-        left:340,
-        bottom:5
+        paddingRight:normalize(10,'padding'),
+        paddingTop:normalize(4,'padding')
     }
 })
