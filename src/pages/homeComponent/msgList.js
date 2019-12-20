@@ -1,6 +1,7 @@
 import React,{ Component } from 'react';
 import { View,Text,Image,StyleSheet,FlatList,TouchableOpacity } from 'react-native';
 import U from '../../util/utils';
+import normalize from 'react-native-normalize';
 export default class MsgList extends Component{
         showItem=(info)=>{
             info.item['msg'] = info.item.msgList && info.item.msgList.length?info.item.msgList[info.item.msgList.length-1].msgInfo:'';
@@ -14,7 +15,7 @@ export default class MsgList extends Component{
                     </View>
                     <View style={styles.msgBox}>
                         <View style={styles.nameBox}><Text style={styles.nameText}>{info.item.uname}</Text></View>
-                        <View><Text style={styles.msgText}>{info.item.msg}</Text></View>
+                        <View><Text style={styles.msgText} ellipsizeMode='tail' numberOfLines={2} numberOfLines={2}>{info.item.msg}</Text></View>
                     </View>
                     <View style={styles.statusBox}>
                         <View></View>
@@ -42,38 +43,41 @@ const styles = StyleSheet.create({
     },
     itemBox:{
         flexDirection:'row',
-        marginTop:1,
+        marginTop:normalize(1),
         backgroundColor:'#FFF',
-        height:80,
+        height:normalize(80,'height'),
         flex:1,
         alignItems:'center'
     },
     avatarBox:{
-        paddingLeft:10,
+        paddingLeft:normalize(10),
         elevation:50
     },
     msgBox:{
         marginRight:'auto',
+        width:'50%',
+        overflow:'hidden'
     },
     nameBox:{
-        paddingBottom:5
+        paddingBottom:normalize(5)
     },
     nameText:{
-        fontSize:18,
+        fontSize:normalize(18,'fontSize'),
 
     },  
     msgText:{
-        color:'#9DA5BA'
+        color:'#9DA5BA',
+        
     },
     avatarImg:{
         width:60,
         height:60,
         borderRadius:50,
-        marginRight:24,
+        marginRight:normalize(24),
         
     },
     timerText:{
         color:'#929BB1',
-        paddingRight:10
+        paddingRight:normalize(10)
     }
 })

@@ -20,7 +20,7 @@ export default class DetailTemplate extends Component{
             <View style={styles.slide}>
                 <View>
                     <ImageBackground source={{uri:item.themeimage}} style={{width:normalize(340,'width'),height:normalize(240,'height'),alignItems:'flex-end'}}>
-                        <Icon style={styles.deleteIcon} name={'remove'} size={normalize(20)} backgroundColor='#000'/>
+                        <Icon style={styles.deleteIcon} name={'remove'} size={normalize(20)} color='#000'/>
                     </ImageBackground>
                 </View>
                 <View style={{paddingLeft:normalize(10,'left'),paddingRight:normalize(10,'right'),flex:1}}>
@@ -182,6 +182,6 @@ const styles = StyleSheet.create({
     },
     deleteIcon:{
         paddingRight:normalize(10,'padding'),
-        paddingTop:normalize(4,'padding')
+        paddingTop:normalize(4,'padding'),
     }
 })

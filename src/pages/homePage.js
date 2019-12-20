@@ -35,12 +35,17 @@ class HomePage extends React.Component{
         console.log('Index onLoad :',options);
         U.getStorage('tokencode').then(res=>{
             token = res;
-            this.getList();
         });
     }
     
     onShow(options){
         console.log('Index onShow :',options)
+        if(!this.state.list.length){
+            U.getStorage('tokencode').then(res=>{
+                token = res;
+                this.getList();
+            });
+        }
         
     }
     getList(){
@@ -50,13 +55,16 @@ class HomePage extends React.Component{
                     list:res.data
                 })
             }else{
-                this.setState({
-                    visible: true
-                }); 
-        
-                setTimeout(() => this.setState({
-                    visible: false
-                }), 5000);
+                if(res.code==301){
+                    this.setState({
+                        visible: true
+                    }); 
+            
+                    setTimeout(() => this.setState({
+                        visible: false
+                    }), 5000);
+                }
+                
             }
            
         })

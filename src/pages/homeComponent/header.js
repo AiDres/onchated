@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import { Text, View, StyleSheet, Image,TouchableOpacity, } from 'react-native';
 import { DrawerActions } from 'react-navigation-drawer';
+import normalize from 'react-native-normalize';
 export default class HeadElement extends Component {
     constructor(props) {
         super(props);
@@ -19,7 +20,7 @@ export default class HeadElement extends Component {
                 onPress={this._toggleDrawer.bind(this)}
              ><Image source={require('../../static/images/icons/drawerIcon.png')} style={styles.drawerIconSize}/></TouchableOpacity>
              {/* <SearchBar placeholder="内容" /> */}
-             <View style={{alignItems:'center',flex:1}}><Text style={{
+             <View style={styles.titleContent}><Text style={{
                color:'#FFFFFF'
               }}>
               {this.state.pageTitle}
@@ -38,12 +39,17 @@ const styles = StyleSheet.create({
         display:'flex',
         backgroundColor:'#6b52ae',
         alignItems:'center',
-        paddingLeft:20,
-        paddingRight:20,
         flexDirection:'row'
     },
     drawerIconSize:{
         width:28,
-        height:28
+        height:28,
+        marginLeft:20
+    },
+    titleContent:{
+      position:'absolute',
+      width:'100%',
+      justifyContent:'center',
+      alignItems:'center',
     }
 })
