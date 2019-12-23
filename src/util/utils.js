@@ -18,6 +18,7 @@ export default class U {
         var minutes = Math.floor(leave2 / (60 * 1000))
         var leave3 = leave2 % (60 * 1000)
         var seconds = Math.round(leave3 / 1000)
+        console.log(minutes,dayDiff,hours)
         if (minutes!=0 && dayDiff==0 && hours==0){
             return minutes+'分钟前';
         }else if (hours!=0 && dayDiff==0){

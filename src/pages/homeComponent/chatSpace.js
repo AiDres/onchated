@@ -5,6 +5,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
+import io from "socket.io-client";
 export default class ChatSpace extends Component{
         static navigationOptions={
             header:null
@@ -12,7 +13,8 @@ export default class ChatSpace extends Component{
         constructor(props){
             super(props);
             this.state={
-                isFocus:false
+                isFocus:false,
+                userTarget:this.props.navigation.getParam('parentData')
             }
         }
         componentDidMount() {
@@ -27,8 +29,13 @@ export default class ChatSpace extends Component{
         // methods
         onLoad(options){
             console.log('chatSpace onLoad :',options)
-            
+            this.socket = io("http://192.168.0.114:3000");
+            this.socket.on('get message',msg=>{
+                console.log()
+            })
+            this.socket.emit('chat message',{msg:'how are u',state:200});
         }
+        
         onShow(options){
             console.log('Index onShow :',options)
             
@@ -60,8 +67,8 @@ export default class ChatSpace extends Component{
             this.refs.myInput.blur();
         }
         render(){
-        let userTarget = this.props.navigation.getParam('parentData')   
-        console.log(userTarget)
+        let userTarget = this.state.userTarget;   
+        console.log(this)
         return <>
                 <View style={styles.container}>
                     <View style={styles.customHeaderOfChat}>
@@ -78,7 +85,7 @@ export default class ChatSpace extends Component{
                         </View>
                     </View>
                     <View style={styles.msgBox}>
-                        <FlatList data={userTarget.msgList} renderItem={this._renderItem} />
+                        <FlatList data={userTarget.msgList}  renderItem={this._renderItem} />
                     </View>
                     <View style={styles.inputBox}>
                         <View style={styles.plusBox}>
@@ -152,7 +159,7 @@ const styles = StyleSheet.create({
         minHeight:normalize(40),
         backgroundColor:'#9099B0',
         marginTop:normalize(20),
-        maxWidth:'70%',
+        maxWidth:'50%',
         borderRadius:normalize(10),
         padding:normalize(10),
         marginBottom:normalize(20)

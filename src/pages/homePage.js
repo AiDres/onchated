@@ -6,6 +6,7 @@ import Toast from 'react-native-root-toast';
 import ChatSpace from './homeComponent/chatSpace';
 const S = require('../../server');
 import U from '../util/utils';
+
 var token = '';
 class HomePage extends React.Component{
     // state
@@ -13,7 +14,9 @@ class HomePage extends React.Component{
         super(props);
         this.state = {
             list:[],
-            visible:false
+            visible:false,
+            chatMessage: "",
+            chatMessages: []
         }
     }
 
@@ -36,16 +39,16 @@ class HomePage extends React.Component{
         U.getStorage('tokencode').then(res=>{
             token = res;
         });
+       
+       
     }
     
     onShow(options){
         console.log('Index onShow :',options)
-        if(!this.state.list.length){
-            U.getStorage('tokencode').then(res=>{
-                token = res;
-                this.getList();
-            });
-        }
+        U.getStorage('tokencode').then(res=>{
+            token = res;
+            this.getList();
+        });
         
     }
     getList(){
