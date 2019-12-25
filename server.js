@@ -1,5 +1,5 @@
 // 测试环境/正式环境
-let debuger = true;
+let debuger = false;
 const domainPath = {
     url:debuger?'http://192.168.0.114:3000/':'https://onchated.cn:1080/'
 };
