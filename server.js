@@ -1,7 +1,7 @@
 // 测试环境/正式环境
-let debuger = false;
+let debuger = true;
 const domainPath = {
-    url:debuger?'http://192.168.0.114:3000/':'https://onchated.cn:1080/'
+    url:debuger?'http://192.168.0.114:1081/':'https://onchated.cn/'
 };
 
 const nameIds = {
@@ -38,5 +38,6 @@ function getData(data={},reqPath,doSuccess){
     
 }
 module.exports = {
-    getData
+    getData,
+    url:domainPath.url
 }

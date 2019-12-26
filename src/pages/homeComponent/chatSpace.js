@@ -1,11 +1,14 @@
 import React,{ Component } from 'react';
-import { View,Text,TouchableOpacity,StyleSheet,Image,TextInput,FlatList} from 'react-native';
+import { View,Text,TouchableOpacity,StyleSheet,Image,TextInput,FlatList,KeyboardAvoidingView } from 'react-native';
 import normalize from 'react-native-normalize';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
-import io from "socket.io-client";
+import S from '../../../server';
+import U from '../../util/utils';
+import io from 'socket.io-client';
+let token ='';
 export default class ChatSpace extends Component{
         static navigationOptions={
             header:null
@@ -28,17 +31,25 @@ export default class ChatSpace extends Component{
         }
         // methods
         onLoad(options){
-            console.log('chatSpace onLoad :',options)
-            this.socket = io("http://192.168.0.114:3000");
-            this.socket.on('get message',msg=>{
-                console.log()
-            })
-            this.socket.emit('chat message',{msg:'how are u',state:200});
+            U.getStorage('tokencode').then(res=>{
+                token = res;
+                this.getOrAddSocket();
+            });
         }
-        
+       
         onShow(options){
             console.log('Index onShow :',options)
             
+        }
+        getOrAddSocket(){
+            this.socket = io(S.url);
+            console.log(this.state.userTarget)
+            this.socket.on(token,msg=>{
+                console.log(msg)
+            });
+        }
+        addSocket(data){
+            this.socket.emit('add',{tokencode:token,friendId:this.state.userTarget.userid,msg:data});
         }
         _renderItem(data){
             return <>
@@ -64,11 +75,16 @@ export default class ChatSpace extends Component{
             
         }
         doSend = ()=>{
-            this.refs.myInput.blur();
+            this.refs.myInput.clear();
+            let value = this.refs.myInput._lastNativeText
+            if(!value){
+                return ;
+            }
+            this.addSocket(value);
         }
         render(){
         let userTarget = this.state.userTarget;   
-        console.log(this)
+        console.log(userTarget)
         return <>
                 <View style={styles.container}>
                     <View style={styles.customHeaderOfChat}>
@@ -85,7 +101,7 @@ export default class ChatSpace extends Component{
                         </View>
                     </View>
                     <View style={styles.msgBox}>
-                        <FlatList data={userTarget.msgList}  renderItem={this._renderItem} />
+                        <FlatList data={userTarget.msgList.reverse()} inverted={-1} renderItem={this._renderItem} />
                     </View>
                     <View style={styles.inputBox}>
                         <View style={styles.plusBox}>
@@ -96,7 +112,7 @@ export default class ChatSpace extends Component{
                         <View style={styles.contactBox}>
                             <TextInput style={styles.contentBox} ref="myInput" onSubmitEditing={()=>this.doSend()} onBlur={()=>this.changeStateInput()} onFocus={()=>this.changeStateInput()} placeholder={'Message...'} placeholderTextColor='#BAC0CE'/>
                             <View style={styles.voiceBox}>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={()=>this.doSend()}>
                                 {!this.state.isFocus?
                                     <MaterialIcons name="settings-voice" size={normalize(30,'fontSize')} color="#C5CDDD"/>:
                                     <MaterialCommunityIcons name="send-circle" size={normalize(30,'fontSize')}  color="#3E63F5"/>

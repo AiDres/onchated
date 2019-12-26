@@ -5,6 +5,7 @@ import HeadElement from './homeComponent/header';
 import Toast from 'react-native-root-toast';
 import ChatSpace from './homeComponent/chatSpace';
 const S = require('../../server');
+import io from 'socket.io-client';
 import U from '../util/utils';
 
 var token = '';
@@ -38,18 +39,20 @@ class HomePage extends React.Component{
         console.log('Index onLoad :',options);
         U.getStorage('tokencode').then(res=>{
             token = res;
+            this.getList();
+            this.getlistOfSocket();
         });
-       
-       
     }
-    
     onShow(options){
         console.log('Index onShow :',options)
-        U.getStorage('tokencode').then(res=>{
-            token = res;
-            this.getList();
-        });
         
+        
+    }
+    getlistOfSocket(){
+        this.socket = io(S.url);
+        this.socket.on(token,msg=>{
+            this.getList();
+        })
     }
     getList(){
         S.getData({tokencode:token},'getMsgList',(res)=>{
@@ -75,6 +78,7 @@ class HomePage extends React.Component{
     actionFunc=(path,source)=>{
         switch(path.dispatch){
             case 'onchat':this.onchatSpace(source);break;
+            case 'repull':this.getList();break;
             default :console.log('undefind routePath');
         }
     }
@@ -89,7 +93,7 @@ class HomePage extends React.Component{
         return <>
                 <View style={styles.bgColor}>
                 <View><HeadElement upDrawerfun={this._toggleDrawer.bind(this)} title={'聊吧'} /></View>
-                {this.state.list.length?<MsgList source={this.state.list} funs={this.actionFunc}/>:<></>}
+                {this.state.list.length?<MsgList source={this.state.list} funs={this.actionFunc} />:<></>}
                 <Toast
                     visible={this.state.visible}
                     position={200}

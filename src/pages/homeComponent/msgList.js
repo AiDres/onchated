@@ -24,6 +24,7 @@ export default class MsgList extends Component{
                 </View>
             </TouchableOpacity>
         }
+       
         render(){
             console.log(this)
             let list = this.props.source;
@@ -32,7 +33,7 @@ export default class MsgList extends Component{
                         data={list}
                         renderItem={this.showItem}
                     />
-            </View>
+        </View>
     }
 }
 
