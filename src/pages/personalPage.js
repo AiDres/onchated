@@ -42,13 +42,14 @@ export default class PersonalPage extends Component{
     // methods
     onLoad(options){
         console.log('Personal onLoad :',options)
+        
+    }
+    onShow(options){
+        console.log('Personal onShow :',options);
         U.getStorage('tokencode').then(res=>{
           token = res;
           this.hasLogin();
         });
-    }
-    onShow(options){
-        console.log('Personal onShow :',options);
     }
     _doLogin=()=>{
         var patternEmail = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;

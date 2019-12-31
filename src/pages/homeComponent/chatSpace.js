@@ -1,5 +1,5 @@
 import React,{ Component } from 'react';
-import { View,Text,TouchableOpacity,StyleSheet,Image,TextInput,FlatList,KeyboardAvoidingView } from 'react-native';
+import { View,Text,TouchableOpacity,StyleSheet,Image,TextInput,KeyboardAvoidingView  } from 'react-native';
 import normalize from 'react-native-normalize';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -8,6 +8,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import S from '../../../server';
 import U from '../../util/utils';
 import io from 'socket.io-client';
+import AutoScroll from 'react-native-auto-scroll';
 let token ='';
 export default class ChatSpace extends Component{
         static navigationOptions={
@@ -17,7 +18,8 @@ export default class ChatSpace extends Component{
             super(props);
             this.state={
                 isFocus:false,
-                userTarget:this.props.navigation.getParam('parentData')
+                userTarget:this.props.navigation.getParam('parentData'),
+                msgList:this.props.navigation.getParam('parentData').msgList
             }
         }
         componentDidMount() {
@@ -33,7 +35,7 @@ export default class ChatSpace extends Component{
         onLoad(options){
             U.getStorage('tokencode').then(res=>{
                 token = res;
-                this.getOrAddSocket();
+                this.socket = io(S.url);
             });
         }
        
@@ -41,33 +43,16 @@ export default class ChatSpace extends Component{
             console.log('Index onShow :',options)
             
         }
-        getOrAddSocket(){
-            this.socket = io(S.url);
-            console.log(this.state.userTarget)
-            this.socket.on(token,msg=>{
-                console.log(msg)
-            });
-        }
+
         addSocket(data){
             this.socket.emit('add',{tokencode:token,friendId:this.state.userTarget.userid,msg:data});
+            this.socket.on(token,msg=>{
+                let msgList = this.state.msgList;
+                msgList.push(msg);
+                this.setState({msgList});
+            });
         }
-        _renderItem(data){
-            return <>
-                {   
-                  <View style={{width:'100%'}}>
-                    <View style={styles.parentItemOfmsg,data.item.rightActive?styles.right:styles.left}>
-                        <View style={{...styles.itemMsg,backgroundColor:data.item.rightActive?'#9099B0':'#3E63F5'}}>
-                            {!data.item.rightActive && <Entypo style={{position:'absolute',left:normalize(-20)}} name="triangle-left" size={normalize(40,'fontSize')} color="#3E63F5"/>}
-                            <Text style={{color:'#FFF'}}>{data.item.msgInfo}</Text>
-                            {data.item.rightActive && <Entypo style={{position:'absolute',right:normalize(-20)}} name="triangle-right" size={normalize(40,'fontSize')} color="#9099B0"/>}
-                        </View>
-                        
-                    </View>
-                    
-                  </View>
-                }
-            </>
-        }
+
         changeStateInput = ()=>{
             this.setState({
                 isFocus:!this.state.isFocus
@@ -101,24 +86,53 @@ export default class ChatSpace extends Component{
                         </View>
                     </View>
                     <View style={styles.msgBox}>
-                        <FlatList data={userTarget.msgList.reverse()} inverted={-1} renderItem={this._renderItem} />
-                    </View>
-                    <View style={styles.inputBox}>
-                        <View style={styles.plusBox}>
-                            <TouchableOpacity>
-                                <SimpleLineIcons name="plus" size={normalize(40,'fontSize')} color="#3E63F5"/>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.contactBox}>
-                            <TextInput style={styles.contentBox} ref="myInput" onSubmitEditing={()=>this.doSend()} onBlur={()=>this.changeStateInput()} onFocus={()=>this.changeStateInput()} placeholder={'Message...'} placeholderTextColor='#BAC0CE'/>
-                            <View style={styles.voiceBox}>
-                                <TouchableOpacity onPress={()=>this.doSend()}>
-                                {!this.state.isFocus?
-                                    <MaterialIcons name="settings-voice" size={normalize(30,'fontSize')} color="#C5CDDD"/>:
-                                    <MaterialCommunityIcons name="send-circle" size={normalize(30,'fontSize')}  color="#3E63F5"/>
-                                } 
-                                </TouchableOpacity>
-                            </View>
+                        <AutoScroll>
+                            {
+                                this.state.msgList.map((p,i)=>{
+                                    return <>
+                                        {
+                                            <View style={{width:'100%'}}>
+                                                <View style={styles.parentItemOfmsg,p.rightActive?styles.right:styles.left}>
+                                                {!p.rightActive && 
+                                                    <View style={{...styles.itemMsg,maxWidth:'50%',backgroundColor:p.rightActive?'#9099B0':'#3E63F5'}}>
+                                                        <Entypo style={{position:'absolute',left:normalize(-20)}} name="triangle-left" size={normalize(40,'fontSize')} color="#3E63F5"/>
+                                                        <Text style={{color:'#FFF'}}>{p.msgInfo}</Text>
+        
+                                                    </View>
+                                                } 
+                                                {p.rightActive &&
+                                                    <View style={{...styles.itemMsg,backgroundColor:p.rightActive?'#9099B0':'#3E63F5'}}>
+                                
+                                                            <Text style={{color:'#FFF'}}>{p.msgInfo}</Text>
+                                                            <Entypo style={{position:'absolute',right:normalize(-20)}} name="triangle-right" size={normalize(40,'fontSize')} color="#9099B0"/>
+                                                        </View>
+                                                }
+                                                    
+                                                </View>
+                                                
+                                            </View>
+                                        }
+                                    </>
+                                })
+                            }
+                        </AutoScroll>
+                        <View style={styles.inputBox}>
+                                <View style={styles.plusBox}>
+                                    <TouchableOpacity>
+                                        <SimpleLineIcons name="plus" size={normalize(40,'fontSize')} color="#3E63F5"/>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={styles.contactBox}>
+                                    <TextInput style={styles.contentBox} ref="myInput" onSubmitEditing={()=>this.doSend()} onBlur={()=>this.changeStateInput()} onFocus={()=>this.changeStateInput()} placeholder={'Message...'} placeholderTextColor='#BAC0CE'/>
+                                    <View style={styles.voiceBox}>
+                                        <TouchableOpacity onPress={()=>this.doSend()}>
+                                        {!this.state.isFocus?
+                                            <MaterialIcons name="settings-voice" size={normalize(30,'fontSize')} color="#C5CDDD"/>:
+                                            <MaterialCommunityIcons name="send-circle" size={normalize(30,'fontSize')}  color="#3E63F5"/>
+                                        } 
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
                         </View>
                     </View>
                 </View>
@@ -168,14 +182,14 @@ const styles = StyleSheet.create({
         alignItems:'flex-end',marginRight:normalize(20)
     },
     left:{
-        marginLeft:20,
+        marginLeft:normalize(20),
+        alignItems:'flex-start'
     },
     
     itemMsg:{
         minHeight:normalize(40),
         backgroundColor:'#9099B0',
         marginTop:normalize(20),
-        maxWidth:'50%',
         borderRadius:normalize(10),
         padding:normalize(10),
         marginBottom:normalize(20)

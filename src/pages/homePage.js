@@ -63,7 +63,8 @@ class HomePage extends React.Component{
             }else{
                 if(res.code==301){
                     this.setState({
-                        visible: true
+                        visible: true,
+                        list:[]
                     }); 
             
                     setTimeout(() => this.setState({

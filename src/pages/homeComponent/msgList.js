@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     },
     itemBox:{
         flexDirection:'row',
-        marginTop:normalize(1),
+        marginTop:1,
         backgroundColor:'#FFF',
         height:normalize(80,'height'),
         flex:1,

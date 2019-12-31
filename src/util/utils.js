@@ -26,7 +26,7 @@ export default class U {
         }else  if (dayDiff!=0){
             return dayDiff+'天前';
         } else{
-            return 0;
+            return '刚刚';
         }
     }
     static setStorage(key,value){
